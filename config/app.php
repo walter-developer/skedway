@@ -1,5 +1,6 @@
 <?php
 
+use App\Enumerations\EnumTimezones;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,7 +17,11 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Skedway Eventos'),
+    'name' => env('APP_NAME', 'Skedway'),
+    'configuration' => [
+        'lang' => env('APP_LANG', 'pt-br'),
+        'charset' => env('APP_CHARSET', 'utf-8'),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +75,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => EnumTimezones::TMZ_578_UTC->timezone(),
 
     /*
     |--------------------------------------------------------------------------

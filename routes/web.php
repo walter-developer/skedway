@@ -24,10 +24,31 @@ Route::get('/', function () {
 Route::prefix('/')->group(function () {
     //
     //
-    Route::get('/', fn () => view('welcome'));
+    Route::get('/', fn () => redirect(route('events.calendar.get')));
     //
     //
-    Route::get('/teste', [EventController::class, 'teste'])->name('event.teste');
+    Route::prefix('/events/')->group(function () {
+        //
+        //
+        Route::get('/{event?}', [EventController::class, 'events'])->name('events.events.get');
+        //
+        //
+        Route::post('/', [EventController::class, 'events'])->name('events.events.post');
+        //
+        //
+        Route::put('/', [EventController::class, 'events'])->name('events.events.put');
+        //
+        //
+        Route::delete('/', [EventController::class, 'events'])->name('events.events.delete');
+        //
+        //
+        Route::get('/calendar/', [EventController::class, 'calendar'])->name('events.calendar.get');
+        //
+        //
+        Route::post('/data/', [EventController::class, 'data'])->name('events.data.post');
+        //
+        //
+    });
     //
     //
 });

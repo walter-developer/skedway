@@ -1,0 +1,163 @@
+/*!
+ * Evo Calendar - Simple and Modern-looking Event Calendar Plugin
+ *
+ * Licensed under the MIT License
+ *
+ * Version: 1.1.2
+ * Author: Edlyn Villegas
+ * Docs: https://edlynvillegas.github.com/evo-calendar
+ * Repo: https://github.com/edlynvillegas/evo-calendar
+ * Issues: https://github.com/edlynvillegas/evo-calendar/issues
+ *
+*/
+
+/* Evo Calendar - Theme: Orange Coral */
+.matte-dark {
+    -webkit-box-shadow: 0 10px 50px -20px #41464b;
+    box-shadow: 0 10px 50px -20px #41464b;
+    border: 2px solid #41464b8c;
+}
+.matte-dark .calendar-sidebar {
+    background: #212529;
+    background: -o-linear-gradient(left, #212529, #41464b);
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        from(#212529),
+        to(#41464b)
+    );
+    background: linear-gradient(to right, #212529, #41464b);
+    -webkit-box-shadow: 5px 0 18px -3px #212529;
+    box-shadow: 5px 0 18px -3px #212529;
+}
+.matte-dark.sidebar-hide .calendar-sidebar {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.matte-dark .calendar-sidebar > .month-list::-webkit-scrollbar-thumb:hover {
+    background: #41464b;
+}
+.matte-dark .calendar-sidebar > .month-list > .calendar-months > li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.matte-dark
+    .calendar-sidebar
+    > .month-list
+    > .calendar-months
+    > li.active-month {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+.matte-dark .calendar-sidebar > span#sidebarToggler,
+.matte-dark #eventListToggler {
+    background-color: #41464b;
+    -webkit-box-shadow: 0 0 18px -3px #41464b;
+    box-shadow: 0 0 18px -3px #41464b;
+}
+
+.matte-dark th[colspan="7"] {
+    position: relative;
+    font-size: 30px;
+    color: #212529;
+}
+.matte-dark th[colspan="7"]::after {
+    content: "";
+    display: block;
+    width: 92%;
+    height: 1px;
+    margin: 0 auto;
+    background: #41464b;
+}
+.matte-dark tr.calendar-body .calendar-day .day:hover {
+    background-color: #41464b14;
+    color: #41464b;
+}
+.matte-dark tr.calendar-body .calendar-day .day.calendar-today {
+    background: #41464b; /* fallback for old browsers */ /* Chrome 10-25, Safari 5.1-6 */
+    background: -o-linear-gradient(left, #212529, #41464b);
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        from(#212529),
+        to(#41464b)
+    );
+    background: linear-gradient(
+        to right,
+        #212529,
+        #41464b
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.matte-dark tr.calendar-body .calendar-day .day.calendar-active,
+.matte-dark tr.calendar-body .calendar-day .day.calendar-active:hover {
+    border-color: #000;
+}
+.matte-dark tr.calendar-body .calendar-day .day.calendar-today:hover {
+    color: #fff;
+}
+.matte-dark .calendar-events {
+    background-color: #fff;
+}
+.matte-dark .calendar-events::-webkit-scrollbar-thumb {
+    background: #41464b;
+    border-radius: 5px;
+}
+.matte-dark .calendar-events::-webkit-scrollbar-thumb:hover {
+    background: #41464b;
+}
+.matte-dark .event-container > .event-icon > div.event-bullet-event,
+.matte-dark .event-indicator > .type-bullet > div.type-event {
+    background-color: #41464b;
+}
+.matte-dark .event-list > .event-empty {
+    background-color: rgba(255, 150, 101, 0.15);
+    border: 1px solid #41464b;
+}
+.matte-dark .event-list > .event-empty > p {
+    color: #000;
+}
+.matte-dark .event-container > .event-info > p.event-title > span {
+    color: #41464b;
+    background-color: rgba(255, 150, 101, 0.15);
+    border: 1px solid #41464b;
+}
+@media only screen and (max-width: 768px) {
+    .matte-dark .calendar-inner::after {
+        background-color: rgba(160, 131, 119, 0.5);
+    }
+    .matte-dark .calendar-events {
+        -webkit-box-shadow: -5px 0 18px -3px rgba(255, 152, 101, 0.5);
+        box-shadow: -5px 0 18px -3px rgba(255, 152, 101, 0.5);
+    }
+    .matte-dark.event-hide .calendar-events {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}
+@media screen and (max-width: 425px) {
+    .matte-dark .calendar-sidebar > .calendar-year {
+        background: #41464b;
+        background: -o-linear-gradient(left, #212529, #41464b);
+        background: -webkit-gradient(
+            linear,
+            left top,
+            right top,
+            from(#212529),
+            to(#41464b)
+        );
+        background: linear-gradient(to right, #212529, #41464b);
+        -webkit-box-shadow: 0 5px 18px -3px rgba(152, 91, 61, 0.65);
+        box-shadow: 0 3px 8px -3px rgba(152, 91, 61, 0.65);
+    }
+    .matte-dark .calendar-sidebar > .month-list {
+        background: -o-linear-gradient(left, #ff5e62, #41464b);
+        background: -webkit-gradient(
+            linear,
+            left top,
+            right top,
+            from(#212529),
+            to(#41464b)
+        );
+        background: linear-gradient(to right, #ff5e62, #41464b);
+    }
+}

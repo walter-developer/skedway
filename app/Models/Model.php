@@ -15,12 +15,6 @@ class Model extends MainModel
         'deleted_at' => 'date:d-m-Y H:m:s',
     ];
 
-    protected $appends = [
-        'created_at_utc',
-        'updated_at_utc',
-        'deleted_at_utc',
-    ];
-
     use SoftDeletes;
 
     public function setAttributeRaw(int|string $key, mixed $value = null): static
@@ -50,23 +44,5 @@ class Model extends MainModel
             return strlen(strval($value)) ? $value : $this->getAttributeRaw($key);
         }
         return $this->getAttributeRaw($key);
-    }
-
-    protected function createdAtUtc(): Attribute
-    {
-        $date = $this->created_at;
-        return Attribute::make(get: fn () => $date ? Carbon::parse($date)->toAtomString() : null);
-    }
-
-    protected function updatedAtUtc(): Attribute
-    {
-        $date = $this->updated_at;
-        return Attribute::make(get: fn () => $date ? Carbon::parse($date)->toAtomString() : null);
-    }
-
-    protected function deletedAtUtc(): Attribute
-    {
-        $date = $this->deleted_at;
-        return Attribute::make(get: fn () => $date ? Carbon::parse($date)->toAtomString() : null);
     }
 }

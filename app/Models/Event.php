@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Model;
 use Carbon\Carbon;
+use App\Enumerations\EnumTimezones;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Event extends Model
@@ -16,6 +17,7 @@ class Event extends Model
         'description',
         'start',
         'end',
+        'timezone',
         'created_at',
         'updated_at',
         'deleted_at'
@@ -26,34 +28,61 @@ class Event extends Model
         'description',
         'start',
         'end',
+        'timezone',
     ];
 
     protected $appends = [
-        'start_date_utc',
-        'end_date_utc',
-        'created_at_utc',
-        'updated_at_utc',
-        'deleted_at_utc',
+        'timezone_utc'
     ];
 
+    protected function timezone(): Attribute
+    {
+        return Attribute::make(
+            get: function ($timezone) {
+                return EnumTimezones::enum($timezone)?->value;
+            },
+            set: function ($timezone) {
+                return $timezone instanceof EnumTimezones ? $timezone?->value : EnumTimezones::enum($timezone)?->value;
+            }
+        );
+    }
+
+    protected function timezoneUtc(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $timezone = $this->getAttribute('timezone', EnumTimezones::TMZ_578_UTC?->value);
+                return EnumTimezones::enum($timezone)?->timezone();
+            },
+            set: function ($timezone) {
+                $this->setAttribute('timezone_utc', $timezone instanceof EnumTimezones ? $timezone?->timezone() : EnumTimezones::enum($timezone)?->timezone());
+            }
+        );
+    }
 
     protected function start(): Attribute
     {
         return Attribute::make(
-            get: fn ($date) => Carbon::parse($date)->setTimezone('UTC'),
-            set: fn () => 1
+            get: function ($date) {
+                return Carbon::parse($date)->setTimezone(EnumTimezones::TMZ_578_UTC->timezone())->format('Y-m-d H:i:s');
+            },
+            set: function ($date) {
+                $enum = EnumTimezones::enum($this?->getAttributeRaw('timezone', EnumTimezones::TMZ_578_UTC->name)) ?: EnumTimezones::TMZ_578_UTC;
+                return Carbon::createFromFormat('Y-m-d H:i:s', Carbon::parse($date), $enum->timezone())->setTimezone(EnumTimezones::TMZ_578_UTC->timezone())->format('Y-m-d H:i:s');
+            }
         );
     }
 
-    protected function startDateUtc(): Attribute
+    protected function end(): Attribute
     {
-        $date = $this->start;
-        return Attribute::make(get: fn () => $date ? Carbon::parse($date)->toAtomString() : null);
-    }
-
-    protected function endDateUtc(): Attribute
-    {
-        $end = $this->end;
-        return Attribute::make(get: fn () => $end ? Carbon::parse($end)->toAtomString() : null);
+        return Attribute::make(
+            get: function ($date) {
+                return Carbon::parse($date)->setTimezone(EnumTimezones::TMZ_578_UTC->timezone())->format('Y-m-d H:i:s');
+            },
+            set: function ($date) {
+                $enum = EnumTimezones::enum($this?->getAttributeRaw('timezone', EnumTimezones::TMZ_578_UTC->name)) ?: EnumTimezones::TMZ_578_UTC;
+                return Carbon::createFromFormat('Y-m-d H:i:s', Carbon::parse($date), $enum->timezone())->setTimezone(EnumTimezones::TMZ_578_UTC->timezone())->format('Y-m-d H:i:s');
+            }
+        );
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration
                 ->comment('Data e hora de inicio do evento.');
             $table->timestamp('end')
                 ->comment('Data e hora de final do evento.');
+            $table->integer('timezone')->length(3);
             $table->softDeletes();
             $table->timestamps();
         });
