@@ -24,28 +24,34 @@ Route::get('/', function () {
 Route::prefix('/')->group(function () {
     //
     //
-    Route::get('/', fn () => redirect(route('events.calendar.get')));
+    Route::get('/', fn () => redirect(route('calendar.calendar.get')))->name('welcome');
+    //
+    //
+    Route::prefix('/calendar/')->group(function () {
+        //
+        //
+        Route::get('/', [EventController::class, 'calendar'])->name('calendar.calendar.get');
+        //
+        //
+        Route::post('/data/', [EventController::class, 'data'])->name('calendar.data.post');
+        //
+        //
+    });
     //
     //
     Route::prefix('/events/')->group(function () {
         //
         //
-        Route::get('/{event?}', [EventController::class, 'events'])->name('events.events.get');
+        Route::get('/{event?}', [EventController::class, 'events'])->name('events.event.get');
         //
         //
-        Route::post('/', [EventController::class, 'events'])->name('events.events.post');
+        Route::post('/', [EventController::class, 'create'])->name('events.event.post');
         //
         //
-        Route::put('/', [EventController::class, 'events'])->name('events.events.put');
+        Route::put('/', [EventController::class, 'update'])->name('events.event.put');
         //
         //
-        Route::delete('/', [EventController::class, 'events'])->name('events.events.delete');
-        //
-        //
-        Route::get('/calendar/', [EventController::class, 'calendar'])->name('events.calendar.get');
-        //
-        //
-        Route::post('/data/', [EventController::class, 'data'])->name('events.data.post');
+        Route::get('/delete/{event}', [EventController::class, 'delete'])->name('events.event.delete.get');
         //
         //
     });

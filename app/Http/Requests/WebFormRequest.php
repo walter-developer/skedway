@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use DateTime, DateTimeZone;
+use App\Enumerations\EnumTimezones;
 use App\Support\Collection\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use \Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+
 
 
 class WebFormRequest extends FormRequest
@@ -21,7 +24,26 @@ class WebFormRequest extends FormRequest
         return new Collection(parent::validated($key, $default));
     }
 
-    private function responseTypeJson()
+    protected function formatDate(string $date, string $format = 'Y-m-d H:i:s')
+    {
+        if ($date && strlen($date)) {
+            $datetime = (new DateTime($date));
+            return $datetime->format($format);
+        }
+        return null;
+    }
+
+    protected function timestampToTimezoneUtc(string $date, int $currentTimezone, int $toTimezone, string $format = 'Y-m-d H:i:s')
+    {
+        if ($date && strlen($date)) {
+            $datetime = (new DateTime($date, new DateTimeZone(EnumTimezones::enum($currentTimezone)->timezone())));
+            $datetime = $datetime->setTimezone(new DateTimeZone(EnumTimezones::enum($toTimezone)->timezone()));
+            return $datetime->format($format);
+        }
+        return null;
+    }
+
+    protected function responseTypeJson()
     {
         return strtolower($this->getHeader('Accept')) === 'application/json';
     }
@@ -45,7 +67,7 @@ class WebFormRequest extends FormRequest
                 ->json(['401' => 'O usuário não tem acesso ao este serviço.'], 404)
                 ->setStatusCode(404, 'Data failed validation.'));
         }
-        return throw new HttpResponseException(redirect('/login')->withInput()
+        return throw new HttpResponseException(redirect(route('/'))->withInput()
             ->withErrors($this->singleLevelArray(['error' => 'Não autorizado, autentique-se!']))
             ->setStatusCode(303, '401 Unauthorized'));
     }

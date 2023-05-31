@@ -24,12 +24,9 @@
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="index.html">Events Skedway</a>
-        <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
-        <!-- Navbar Search-->
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Buscar Evento..." aria-label="Buscar Evento..."
@@ -45,11 +42,11 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Eventos</div>
-                        <a class="nav-link" href="{{ route('events.calendar.get') }}">
+                        <a class="nav-link" href="{{ route('calendar.calendar.get') }}">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-calendar-days"></i></div>
                             Meus Eventos
                         </a>
-                        <a class="nav-link" href="{{ route('events.events.get')  }}">
+                        <a class="nav-link" href="{{ route('events.event.get')  }}">
                             <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar-plus"></i></div>
                             Novo Evento
                         </a>
@@ -58,6 +55,17 @@
             </nav>
         </div>
         <div id="layoutSidenav_content">
+            <section id="alert" class="container container-alert" {{ !$errors->any() ? 'hidden' : ''}}>
+                @if($errors->any())
+                <div class="container p-5">
+                    @foreach($errors->getMessages() as $errors)
+                    <div class="alert alert-danger m-3 text-center" role="alert">
+                        {{ $errors[0] ?? 'Um erro ocorreu, tente novamente!'}}
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+            </section>
             <main>
                 @yield('content')
             </main>

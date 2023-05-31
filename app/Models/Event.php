@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Event extends Model
 {
+
+    public const TIMEZONES = EnumTimezones::TMZ_578_UTC;
+
     protected $table = 'events';
 
     protected $columns = [

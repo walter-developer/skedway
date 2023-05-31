@@ -1239,7 +1239,7 @@ enum EnumTimezones: int
         $assoc = [];
         $list = self::cases();
         array_walk($list, function ($case) use (&$assoc) {
-            $assoc[] = ['id' => $case->value, 'description' => $case->label];
+            $assoc[] = ['id' => $case->value, 'description' => $case->timezone()];
         });
         return $assoc;
     }
@@ -1249,7 +1249,7 @@ enum EnumTimezones: int
         $assoc = [];
         $list = self::cases();
         array_walk($list, function ($case) use (&$assoc) {
-            $assoc[$case->value] = $case->label();
+            $assoc[$case->value] = $case->timezone();
         });
         return $assoc;
     }

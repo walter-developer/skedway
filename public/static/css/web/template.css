@@ -5,3 +5,9 @@
     padding: 5px;
     margin-bottom: 20px;
 }
+
+select[readonly] {
+    background: #eee !important;
+    pointer-events: none !important;
+    touch-action: none !important;
+}
