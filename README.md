@@ -1,66 +1,60 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Obrigatório docker e docker compose instalado na maquina local de teste.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+OBS : ARQUIVO .ENV SERÁ VERSIONADO PARA FACILITAR AS CONFIGURAÇÕES PARA QUEM FOR TESTAR
 
-## About Laravel
+No arquivo .env versionado, já deve estar declaradas as variaveis que serão usadas para criar o banco de dados <br>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+PORTAS DE CONEXÃO ( 80, 443 e 3306) DEVEM ESTAR DISPONIVEIS NA HORA DE INICIAR OS CONTAINERS, PARA QUE NÃO ACONTECA CONFLITO DE PORTAS <br>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1° - Clonar o projeto ( skedway ) na maquina que será realizado o teste. <br>
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2° - Adicionar um host local para o projeto na maquina local editando:<br>
+OBS: ( ESTOU USANDO O HOST FAKE walter.skedway.com.br, porém funciona acessando localhost )<br>
+2.1 Para Linux - Editar o aquivo ( /etc/hosts ) e adicinonar [ 127.0.0.1 walter.skedway.com.br ] no aquivo de hosts<br>
+2.2 Para Windows - Editar o aquivo ( C:\Windows\System32\drivers\etc\hosts ) e adicinonar [ 127.0.0.1 walter.skedway.com.br ] no aquivo de hosts<br>
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3° - Após clonar o projeto, acesso a pasta raiz via terminal, e execute o comando : docker-compose up -d .<br>
 
-## Laravel Sponsors
+3.1 - Aguarde até que o container do composer desligue, pois na primeira vez que é executado, ele irá instalar as dependências do projeto, e isso pode levar alguns segundos.<br>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+---
 
-### Premium Partners
+4° Acessando o container do php, para executar-mos as configurações do projeto:<br>
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+4.1 - No terminal, ainda na raiz do projeto, execute o comando: docker container ls, para listar todos os containers ativos.<br>
 
-## Contributing
+4.2 - Após listar os containers, copie a chave de identificação do container com o nome ( skedway-php ).<br>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4.3 - Acesse o container usando o id copiado com o segunte comando: docker exec -it 1d1c1f8e2dba /bin/sh<br>
 
-## Code of Conduct
+4.4 - Em caso de sucesso até a etapa 4.3, vc deve estar acessando o terminal linux do container em /var/www/html<br>
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4.5 - Acesse o diretorio em que o projeto está mapeado atualmente dentro do container com o comando: cd /app/skedway/<br>
 
-## Security Vulnerabilities
+--
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5° - Após as etapas anteriores, você deve estar no terminal linux, dentro da pasta raiz do projeto, então vamos configurar o projeto:<br>
 
-## License
+5.1 - Para realizar as migrações de banco de dados do projeto e criar as tabelas, execute o comando: php artisan migrate.<br>
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+--
+
+6° - Agora para testar o projeto, basta acessar localhost ou https://walter.skedway.com.br/<br>
+
+--
+
+7° - Como solicitado, o sistema contém 3 telas para melhor apresentação:<br>
+
+7.1° - ( 1° Tela para cadastro e edição de eventos ) <br>
+
+7.2° - ( 2° Tela para vizualização de eventos no formato calendário ) <br>
+
+7.3° - ( 3° Tela para vizualização de eventos no formato de tabela paginada. ) <br> <br>
+
+Em caso de dúvidas estou há diposição, e mais uma vez, grato pela oportunidade.
