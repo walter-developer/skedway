@@ -27,6 +27,18 @@ Route::prefix('/')->group(function () {
     Route::get('/', fn () => redirect(route('calendar.calendar.get')))->name('welcome');
     //
     //
+    Route::prefix('/listing/')->group(function () {
+        //
+        //
+        Route::get('/events/all/', [EventController::class, 'all'])->name('listing.events.all.get');
+        //
+        //
+        Route::post('/events/data/', [EventController::class, 'dataPagination'])->name('listing.events.data.get');
+        //
+        //
+    });
+    //
+    //
     Route::prefix('/calendar/')->group(function () {
         //
         //

@@ -31,7 +31,7 @@
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Buscar Evento..." aria-label="Buscar Evento..."
-                    aria-describedby="btnNavbarSearch" />
+                    aria-describedby="btnNavbarSearch" readonly />
                 <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
                         class="fas fa-search"></i></button>
             </div>
@@ -45,11 +45,15 @@
                         <div class="sb-sidenav-menu-heading">Eventos</div>
                         <a class="nav-link" href="{{ route('calendar.calendar.get') }}">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                            Meus Eventos
+                            Meu Calendário
                         </a>
                         <a class="nav-link" href="{{ route('events.event.get')  }}">
                             <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar-plus"></i></div>
                             Novo Evento
+                        </a>
+                        <a class="nav-link" href="{{ route('listing.events.all.get') }}">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
+                            Meus Eventos
                         </a>
                     </div>
                 </div>

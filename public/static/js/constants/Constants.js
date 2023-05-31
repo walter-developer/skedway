@@ -55,13 +55,187 @@ const EVO_CALENDER = {
     }
 };
 
+const TABULATOR_CONFIGURATION = {
+    data: [],
+    minHeight: "100px",
+    locale: "pt-BR",
+    layout: "fitDataFill",
+    responsiveLayout: "collapse",
+    pagination: true,
+    paginationMode: "remote",
+    sortMode: "remote",
+    filterMode: "remote",
+    paginationSize: 10,
+    paginationSizeSelector: [2, 3, 4, 5, 7, 10],
+    ajaxURL: URL,
+    dataLoaderLoading: "Caregando...",
+    placeholder: "Nenhum registro encontrado!",
+    ajaxRequestFunc: function (url, config, params) {
+        let self = this;
+        let table = self.table;
+        return fetch(url, {
+            headers: config.headers,
+            method: config.method,
+            body: JSON.stringify(params),
+        }).then((http) => {
+            let total = http.headers.get("App-Paginate-Total") ? http.headers.get("App-Paginate-Total") : 0;
+            let limite = http.headers.get("App-Paginate-Limit") ? http.headers.get("App-Paginate-Limit") : table.getPageSize();
+            if (http && (http.ok || (http.status >= 200 && http.status <= 299))) {
+                table.setMaxPage(Math.ceil(total / limite));
+                return http.json().catch(() => { return Promise.resolve([]); });
+            }
+            return Promise.reject(http);
+        }).catch((http) => {
+            let message = http.headers.get("App-Message") ? http.headers.get("App-Message") : http.statusText;
+            setTimeout(function () {
+                table.alertManager.alert(message);
+                setTimeout(function () {
+                    table.alertManager.clear();
+                }, 3000);
+            }, 100);
+            return Promise.resolve([]);
+        });
+    },
+    ajaxResponse: function (url, params, data) {
+        let self = this;
+        return {
+            url: url,
+            data: response,
+            params: params,
+            last_page: self.getPageMax(),
+        };
+    },
+    ajaxParams: function () {
+        let orders = {};
+        this.getSorters().forEach(function (value) {
+            if (typeof value == "object") {
+                orders[value.field] = value.dir;
+            }
+        });
+        return {
+            pagina: this.getPage(),
+            limite: this.getPageSize(),
+            ordem: orders,
+        };
+    },
+    ajaxConfig: {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json; charset=utf-8",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-Token": CSRF_TOKEN,
+            "Access-Control-Allow-Origin": URL,
+            "App-Paginate-Page": 1,
+            "App-Paginate-Limit": 20,
+            "App-Paginate-Order": JSON.stringify([]),
+            "App-Paginate-Search": "",
+        },
+    },
+    ajaxContentType: {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json; charset=utf-8",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-Token": CSRF_TOKEN,
+            "Access-Control-Allow-Origin": URL,
+            "App-Paginate-Page": 1,
+            "App-Paginate-Limit": 20,
+            "App-Paginate-Order": JSON.stringify([]),
+            "App-Paginate-Search": "",
+        },
+        body: function (url, config, params) {
+            return JSON.stringify(params);
+        },
+    },
+    responsiveLayoutCollapseFormatter: function (data) {
+        let title = null;
+        let field = null;
+        let value = null;
+        let collapse = false;
+        let ul = document.createElement("ul");
+        let li = document.createElement("li");
+        let div = document.createElement("div");
+        for (let key in data) {
+            collapse = true;
+            value = data[key].value;
+            field = data[key].field;
+            title = data[key].title;
+            li = document.createElement("li");
+            div = document.createElement("div");
+            div.insertAdjacentHTML(
+                "beforeend",
+                "<strong>" + title + ":</strong>"
+            );
+            div.insertAdjacentHTML("beforeend", " " + value);
+            li.appendChild(div);
+            ul.appendChild(li);
+        }
+        return collapse ? ul : null;
+    },
+    columns: [
+        {
+            title: "+",
+            formatter: "responsiveCollapse",
+            minWidth: 50,
+            hozAlign: "left",
+            resizable: false,
+            headerSort: false,
+        },
+        {
+            title: "Coluna ID",
+            field: "id",
+            sorter: "string"
+        },
+        {
+            title: "Coluna HTML",
+            field: "html",
+            sorter: "string",
+            formatter: "html",
+        },
+    ],
+    langs: {
+        "pt-BR": {
+            columns: {
+                name: "Nome",
+            },
+            ajax: {
+                loading: "Carregando...",
+                error: "Erro ao carregar",
+            },
+            groups: {
+                item: "item",
+                items: "itens",
+            },
+            pagination: {
+                first: "Primeiro",
+                first_title: "Primeiro Título",
+                last: "Ultimo",
+                last_title: "Ultimo Título",
+                prev: "Anterior",
+                prev_title: "Página Anterior",
+                next: "Próximo",
+                next_title: "Próxima Página",
+                page_size: "Limite",
+            },
+            headerFilters: {
+                default: "Filtre Colunas",
+                columns: {
+                    name: "Coluna ID",
+                },
+            },
+        },
+    }
+};
+
 export {
     URL,
     URI,
     SEARCH,
     DOMAIN,
     CSRF_TOKEN,
-    EVO_CALENDER
+    EVO_CALENDER,
+    TABULATOR_CONFIGURATION
 };
 
 export const CONSTANTS = {
@@ -70,5 +244,6 @@ export const CONSTANTS = {
     SEARCH: SEARCH,
     DOMAIN: DOMAIN,
     CSRF_TOKEN: CSRF_TOKEN,
-    EVO_CALENDER: EVO_CALENDER
+    EVO_CALENDER: EVO_CALENDER,
+    TABULATOR_CONFIGURATION: TABULATOR_CONFIGURATION
 };

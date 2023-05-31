@@ -161,7 +161,7 @@ export default class Collection {
                 items[prop] = isObject && isObjecCollection ? value.all() : value;
             }
         }
-        return items;
+        return { ...items };
     }
     item(attribute = null) {
         let self = this;

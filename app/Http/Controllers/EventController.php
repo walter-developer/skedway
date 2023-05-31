@@ -6,7 +6,8 @@ use App\Http\Requests\{
     FormEventId,
     FormEventCreate,
     FormEventUpdate,
-    FormEventDelete
+    FormEventDelete,
+    FormEventList
 };
 use App\Models\Event;
 use App\Enumerations\EnumTimezones;
@@ -21,6 +22,11 @@ class EventController extends Controller
     public function __construct(Event $event)
     {
         $this->event = $event;
+    }
+
+    public function all()
+    {
+        return view('all-events');
     }
 
     public function calendar()
@@ -53,6 +59,23 @@ class EventController extends Controller
             ->setStatusCode($status);
     }
 
+    public function dataPagination(FormEventList $request)
+    {
+
+        $collection = $request->valid();
+
+        $events = $this->event
+            ->orderby('start', 'desc')
+            ->paginate($collection->get('limit', 10), ['*'], 'page', $collection->get('page', 0));
+
+        $data = $events?->getCollection()?->toArray() ?: [];
+
+        return response()
+            ->json($data, $events?->isEmpty() ? 204 : 200)
+            ->header('App-Paginate-total', $events?->total())
+            ->setStatusCode($events?->isEmpty() ? 204 : 200, $events?->isEmpty() ? 'No content.' : 'Ok.');
+    }
+
     public function create(FormEventCreate $request)
     {
         $collection = $request->valid();
@@ -70,7 +93,6 @@ class EventController extends Controller
         return redirect(route('calendar.calendar.get'))
             ->with('success', ['Evento cadastrado com sucesso!']);
     }
-
 
     public function update(FormEventUpdate $request)
     {
@@ -94,7 +116,6 @@ class EventController extends Controller
         return redirect(route('calendar.calendar.get'))
             ->with('success', ['Evento atualizado com sucesso!']);
     }
-
 
     public function delete(FormEventDelete $request)
     {
