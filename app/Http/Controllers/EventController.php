@@ -8,7 +8,6 @@ use App\Http\Requests\{
     FormEventUpdate,
     FormEventDelete
 };
-use Carbon\Carbon;
 use App\Models\Event;
 use App\Enumerations\EnumTimezones;
 use App\Http\Controllers\Controller;
@@ -45,7 +44,7 @@ class EventController extends Controller
     {
         $events = $this->event
             ->where('end', '>=', DB::raw('CURRENT_TIMESTAMP()'))
-            ->orderby('start', 'asc')
+            ->orderby('start', 'desc')
             ->get()?->toArray();
 
         $status = count($events) ? 200 : 204;
@@ -68,7 +67,8 @@ class EventController extends Controller
 
         $this->event->firstOrCreate($newEvent, $newEvent);
 
-        return redirect(route('calendar.calendar.get'));
+        return redirect(route('calendar.calendar.get'))
+            ->with('success', ['Evento cadastrado com sucesso!']);
     }
 
 
@@ -91,7 +91,8 @@ class EventController extends Controller
 
         $this->event->updateOrCreate($findEvent, $newEvent);
 
-        return redirect(route('calendar.calendar.get'));
+        return redirect(route('calendar.calendar.get'))
+            ->with('success', ['Evento atualizado com sucesso!']);
     }
 
 
@@ -99,6 +100,7 @@ class EventController extends Controller
     {
         $collection = $request->valid();
         $this->event->find($collection->get('event'))?->delete();
-        return redirect(route('calendar.calendar.get'));
+        return redirect(route('calendar.calendar.get'))
+            ->with('success', ['Evento excluido com sucesso!']);
     }
 }

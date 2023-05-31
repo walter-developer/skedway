@@ -18,13 +18,14 @@
     <link rel="stylesheet" href="{{ asset('static/plugins/bootstrap-icons-1.10.5/font/bootstrap-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('static/plugins/startbootstrap-sb/css/styles.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('static/plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('static/css/web/alert-html.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('static/css/web/template.css') }}">
     @yield('include-css')
 </head>
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand ps-3" href="index.html">Events Skedway</a>
+        <a class="navbar-brand ps-3" href="{{ route('calendar.calendar.get') }}">Events Skedway</a>
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
@@ -55,17 +56,6 @@
             </nav>
         </div>
         <div id="layoutSidenav_content">
-            <section id="alert" class="container container-alert" {{ !$errors->any() ? 'hidden' : ''}}>
-                @if($errors->any())
-                <div class="container p-5">
-                    @foreach($errors->getMessages() as $errors)
-                    <div class="alert alert-danger m-3 text-center" role="alert">
-                        {{ $errors[0] ?? 'Um erro ocorreu, tente novamente!'}}
-                    </div>
-                    @endforeach
-                </div>
-                @endif
-            </section>
             <main>
                 @yield('content')
             </main>
@@ -83,12 +73,86 @@
             </footer>
         </div>
     </div>
+    <!--========================================================================================================================================== -->
+    @php
+
+    $informations = isset($informations) ? $informations->all() : session('informations', []);
+    $success = isset($success) ? $success->all() : session('success', []);
+    $redirects = isset($redirects) ? $redirects->all() : session('redirects', []);
+    $errors = isset($errors) ? $errors->all() : session('errors', []);
+    $errorServers = isset($errors_servers) ? $errors_servers->all() : session('errors_servers', []);
+
+    @endphp
+    @if (count($informations) || count($success) || count($redirects) || count($errors) || count($errorServers))
+    <alert-html class="col-12">
+        @if (count($informations))
+        <!-- Alert Informations Http Code 001 in between 199 -->
+        @foreach ($informations as $message)
+        <alert-html-item class="alert-html-informations" backend="true">
+            <alert-html-menssage>
+                <span>{{ is_array($message) ? current($message) : $message }}<br></span>
+            </alert-html-menssage>
+            <alert-html-close tabindex="0" role="button">X</alert-html-close>
+        </alert-html-item>
+        @endforeach
+        @endif
+        @if (count($success))
+        <!-- Alert Success Http Code 200 in between 299 -->
+
+        @foreach ($success as $message)
+        <alert-html-item class="alert-html-success" backend="true">
+            <alert-html-menssage>
+                <span>{{ is_array($message) ? current($message) : $message }}<br></span>
+            </alert-html-menssage>
+            <alert-html-close tabindex="0" role="button">X</alert-html-close>
+        </alert-html-item>
+        @endforeach
+        @endif
+        @if (count($redirects))
+        <!-- Alert Redirects Http Code 300 in between 399 -->
+
+        @foreach ($redirects as $message)
+        <alert-html-item class="alert-html-redirects" backend="true">
+            <alert-html-menssage>
+                <span>{{ is_array($message) ? current($message) : $message }}<br></span>
+            </alert-html-menssage>
+            <alert-html-close tabindex="0" role="button">X</alert-html-close>
+        </alert-html-item>
+        @endforeach
+        @endif
+        @if (count($errors))
+        <!-- Alert Errors Http Code 400 in between 499 -->
+        @foreach ($errors as $message)
+        <alert-html-item class="alert-html-danger" backend="true">
+            <alert-html-menssage>
+                <span>{{ is_array($message) ? current($message) : $message }}<br></span>
+            </alert-html-menssage>
+            <alert-html-close tabindex="0" role="button">X</alert-html-close>
+        </alert-html-item>
+        @endforeach
+        @endif
+        @if (count($errorServers))
+        <!-- Alert Errors Server Http Code 500 in between 599 -->
+        @foreach ($errorServers as $message)
+        <alert-html-item class="alert-html-danger-server" backend="true">
+            <alert-html-menssage>
+                <span>{{ is_array($message) ? current($message) : $message }}<br></span>
+            </alert-html-menssage>
+            <alert-html-close tabindex="0" role="button">X</alert-html-close>
+        </alert-html-item>
+        @endforeach
+        @endif
+    </alert-html>
+    @endif
+    <!--========================================================================================================================================== -->
+
     <script type="text/javascript" src="{{ asset('static/plugins/jquery-3.6.4/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('static/plugins/bootstrap-5.0.2/dist/js/bootstrap.min.js') }}">
     </script>
     <script type="text/javascript" src="{{ asset('static/plugins/bootstrap-5.0.2/dist/js/bootstrap.bundle.min.js') }}">
     </script>
     <script src="{{ asset('static/plugins/fontawesome-free/js/all.min.js') }}"></script>
+    <script type="module" src="{{ asset('static/js/web/template.min.js') }}"></script>
     <script type="module" src="{{ asset('static/js/web/template.min.js') }}"></script>
     @yield('include-js')
 </body>
